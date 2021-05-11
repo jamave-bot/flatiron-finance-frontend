@@ -18,7 +18,9 @@ function showFinances(){
                     <h1> ${financeObj.name} </h1>
                     <h3>Value: </h3>
                     <h1> ${financeObj.value} </h1>
+                    <button> X </button> 
                     `
+                    div.querySelector('button').add
                     expensesDiv.append(div)
                 }
                 else{
