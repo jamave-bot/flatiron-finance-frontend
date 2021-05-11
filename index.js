@@ -10,7 +10,6 @@ const assetTotalh3 = document.querySelector('h3#assetTotal')
 const grandTotalh2 = document.querySelector('h2#grandTotal')
 
 showFinances()
-updateTotals()
 
 function updateTotals() {
     console.log('hi')
