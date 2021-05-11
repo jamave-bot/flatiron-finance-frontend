@@ -10,18 +10,9 @@ function showFinances(){
         .then(res => res.json())
         .then((financeArr)=>{
             financeArr.forEach(financeObj => {
-                if (financeObj.description === 'asset'){
+                if (financeObj.description === 'expense'){
                     let div = document.createElement('div');
-                    div.innerHTML = `
-                    <h3>Name of Asset: </h3>
-                    <h1> ${financeObj.name} </h1>
-                    <h3>Value: </h3>
-                    <h1> ${financeObj.value} </h1>
-                    `
-                    assetsDiv.append(div)
-                }
-                else{
-                    let div = document.createElement('div');
+                    div.className = 'card'
                     div.innerHTML = `
                     <h3>Name of Expense: </h3>
                     <h1> ${financeObj.name} </h1>
@@ -29,6 +20,17 @@ function showFinances(){
                     <h1> ${financeObj.value} </h1>
                     `
                     expensesDiv.append(div)
+                }
+                else{
+                    let div = document.createElement('div');
+                    div.className = 'card'
+                    div.innerHTML = `
+                    <h3>Name of Asset: </h3>
+                    <h1> ${financeObj.name} </h1>
+                    <h3>Value: </h3>
+                    <h1> ${financeObj.value} </h1>
+                    `
+                    assetsDiv.append(div)
                 }
             });
         })
