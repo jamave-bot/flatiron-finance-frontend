@@ -10,7 +10,7 @@ const assetTotalh3 = document.querySelector('h3#assetTotal')
 const grandTotalh2 = document.querySelector('h2#grandTotal')
 
 showFinances()
-
+updateTotals()
 
 function updateTotals() {
     const expenseArray = expensesDiv.querySelectorAll('.itemValue')
@@ -33,7 +33,7 @@ function updateTotals() {
     assetTotalh3.innerText = `Asset Total: ${assetTotal}`
     grandTotalh2.innerText = `Grand Total: ${grandTotal}`
 } 
-updateTotals()
+
 function showFinances(){
     fetch('http://localhost:3000/finances')
         .then(res => res.json())
