@@ -7,13 +7,29 @@ const assetsForm = document.getElementById('assets-form');
 
 const expenseTotalh3 = document.querySelector('h3#expenseTotal')
 const assetTotalh3 = document.querySelector('h3#assetTotal')
-const grandTotalh3 = document.querySelector('h2#grandTotal')
-showFinances();
+const grandTotalh2 = document.querySelector('h2#grandTotal')
+
+showFinances()
 updateTotals()
 
 function updateTotals() {
-    const expenseTotal = parseInt(expensesDiv.totalExpenseValue.innerText)
-    const assetTotal = parseInt(expensesDiv.totalAssetValue.innerText)
+    console.log('hi')
+    const expenseArray = expensesDiv.querySelectorAll('.itemValue')
+    console.log(expenseArray)
+    let expenseTotal = 0
+    for (value of expenseArray) {
+        debugger
+        expenseTotal += parseInt(value.innerText)
+        console.log(expenseTotal)
+    }
+    
+    const assetArray = assetsDiv.querySelectorAll('.itemValue')
+    let assetTotal = 0 
+    for (value of assetArray) {
+        assetTotal += parseInt(value.innerText)
+        console.log(assetTotal)
+    }
+    
     const grandTotal = parseInt(expenseTotal) + parseInt(assetTotal)
     expenseTotalh3.innerText = `Expense Total: ${expenseTotal}`
     assetTotalh3.innerText = `Asset Total: ${assetTotal}`
@@ -59,10 +75,9 @@ function showFinances(){
                  addTransaction(financeObj)
                 })
             });
+            updateTotals()
         })
 }
-
-showFinances();
 
 function addTransaction (financeObj) {
     const newTransactForm = document.querySelector('#new-transaction-form')
@@ -80,6 +95,8 @@ function addTransaction (financeObj) {
         .then((newValue) => {
             document.querySelector(`div[data-id = "${financeObj.id}"] .itemValue`).innerText = newValue.value
             newTransactForm.innerHTML = ''
+            updateTotals()
         })
     })
 }
+
