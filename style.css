@@ -1,7 +1,60 @@
-.card {
-    color: blue;
+
+body {
+    background-image: url('https://www.history.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTU3ODc5MDg3MjM2MTMwNTI3/clouds-over-flatiron-building-nyc-2.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    
+  }
+
+body h4{
+    font-size: 5em;
+    text-align: center;
+    font-style: italic;
+    color:black;
+    text-shadow: 5px 5px 0px white;
 }
 
+body h2{
+    font-style: italic;
+    color:black;
+    text-shadow: 1px 1px 0px white;
+    font-size: 2.5em;
+}
+
+.card {
+    width: 150px;
+    margin-left: 10px;
+    margin-right: 10px;
+    /* border-style: solid;
+    border-radius: 5%; */
+    text-align: center;
+    opacity: 90%;
+}
+
+.card h3{
+    text-align: left;
+    background-color: #CCCBCB ;
+    margin: 0px 0px 0px 0px;
+    font-size: small;
+    font-weight: bold; 
+}
+
+.card button{
+    margin-top: 10px;
+}
 .card h1{
-    color:green
+    background-color: grey;
+    margin: 0px 0px 0px 0px;
+    padding: 20px 0px 20px 0px;
+    font-size: large;
+}
+
+span{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+label{
+    color: white;
 }

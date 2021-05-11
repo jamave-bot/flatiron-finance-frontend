@@ -4,6 +4,9 @@ const assetsDiv = document.getElementById('assets');
 const totalDiv = document.getElementById('total');
 const expensesForm = document.getElementById('expenses-form'); 
 const assetsForm = document.getElementById('assets-form');
+const expensesSpan = document.getElementById('expenses-span')
+const assetsSpan = document.getElementById('assets-span')
+
 
 function showFinances(){
     fetch('http://localhost:3000/finances')
@@ -20,8 +23,11 @@ function showFinances(){
                     <h1> ${financeObj.value} </h1>
                     <button> X </button> 
                     `
-                    div.querySelector('button').add
-                    expensesDiv.append(div)
+                    div.querySelector('button').addEventListener('click', ()=> {    
+                        deleteObj(financeObj)
+                        div.innerHTML = ''
+                    });
+                    expensesSpan.append(div)
                 }
                 else{
                     let div = document.createElement('div');
@@ -31,14 +37,28 @@ function showFinances(){
                     <h1> ${financeObj.name} </h1>
                     <h3>Value: </h3>
                     <h1> ${financeObj.value} </h1>
+                    <button> X </button> 
                     `
-                    assetsDiv.append(div)
+                    div.querySelector('button').addEventListener('click', ()=> {    
+                        deleteObj(financeObj)
+                        div.innerHTML = ''
+                    });
+                    assetsSpan.append(div)
                 }
             });
         })
 }
 
 showFinances();
+
+function deleteObj(financeObj){
+    fetch(`http://localhost:3000/finances/${financeObj.id}`, {
+        method: "DELETE",
+    })
+    // .then(res => res.json())
+    .then(()=> console.log('deleted it'))
+}
+
 
 let newAssetInput = document.querySelector('input#assetsName')
 let valueOfAsset = document.querySelector('input#totalAssetValue')

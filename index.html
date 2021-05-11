@@ -9,35 +9,54 @@
     <script defer src='index.js'></script>
 </head>
 <body>
+
+    <h4>Flatiron Finance</h4>
+
     <div id='name'>
 
     </div>
 
+    <br>
+    
+    <h2>Expenses</h2>
+    <span id = 'expenses-span'></span>
+    
+    <br><br>
 
     <div id='expenses'>
         <form id = 'expenses-form'>
             <label for="expenseName">Name of Expense: </label><br>
-            <input type="text" id="expenseName" name="expenseName" value="Expense Name"><br>
+            <input type="text" id="expenseName" name="expenseName" placeholder="Expense Name"><br>
 
             <label for="totalExpenseValue">Total Value:</label><br>
-            <input type="text" id="totalExpenseValue" name="totalExpenseValue" value="-$$$"><br>
+            <input type="text" id="totalExpenseValue" name="totalExpenseValue" placeholder="-$$$"><br>
 
             <input type="submit" value="Submit Expense">
         </form>
     </div>
+    
 
-    <br><br><br><br><br><br>
+    <br><br><br><br>
+
+    <h2>Assets</h2>
+    <span id = 'assets-span'></span>
+    <br><br>
+
     <div id='assets'>
         <form id = 'assets-form'>
             <label for="assetsName">Name of Asset: </label><br>
-            <input type="text" id="assetsName" name="assetsName" value="Asset Name"><br>
+            <input type="text" id="assetsName" name="assetsName" placeholder="Asset Name"><br>
 
             <label for="totalAssetValue">Total Value:</label><br>
-            <input type="text" id="totalAssetValue" name="totalAssetValue" value="$$$"><br>
+            <input type="text" id="totalAssetValue" name="totalAssetValue" placeholder="$$$"><br>
 
             <input type="submit" value="Submit Asset">
         </form>
     </div>
+
+
+
+
 
     <div id='total'>
 
