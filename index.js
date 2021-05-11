@@ -5,11 +5,19 @@ const totalDiv = document.getElementById('total');
 const expensesForm = document.getElementById('expenses-form'); 
 const assetsForm = document.getElementById('assets-form');
 
+const expenseTotalh3 = document.querySelector('h3#expenseTotal')
+const assetTotalh3 = document.querySelector('h3#assetTotal')
+const grandTotalh3 = document.querySelector('h2#grandTotal')
+showFinances();
+updateTotals()
 
 function updateTotals() {
-    const expenseTotal = expensesDiv.totalExpenseValue.value
-    const assetTotal = expensesDiv.totalAssetValue.value
+    const expenseTotal = parseInt(expensesDiv.totalExpenseValue.innerText)
+    const assetTotal = parseInt(expensesDiv.totalAssetValue.innerText)
     const grandTotal = parseInt(expenseTotal) + parseInt(assetTotal)
+    expenseTotalh3.innerText = `Expense Total: ${expenseTotal}`
+    assetTotalh3.innerText = `Asset Total: ${assetTotal}`
+    grandTotalh2.innerText = `Grand Total: ${grandTotal}`
 } 
 
 function showFinances(){
