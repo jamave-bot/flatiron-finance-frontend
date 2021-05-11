@@ -7,12 +7,13 @@ const assetsForm = document.getElementById('assets-form');
 
 
 
-
+let newAssetInput = document.querySelector('input#assetsName')
+let valueOfAsset = docuemnt.querySelector('inout#totalAssetValue')
 
 assetsForm.addEventListener('submit', (evt) => {
 evt.preventDefault
-let newAssetInput = assetInput.value
-let valueOfAsset = assetValue.value
+let newAssetInput = newAssetInput.value
+let valueOfAsset = valueOfAsset.value
 
 fetch(`http://localhost:3000//${evt.target.dataset.id}`, {
   method: "POST",
