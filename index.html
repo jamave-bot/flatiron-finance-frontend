@@ -5,21 +5,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flatiron Finance</title>
+    <link rel="stylesheet" href="./style.css">
     <script defer src='index.js'></script>
 </head>
 <body>
     <div id='name'>
 
     </div>
-
+    
+    <div id='newTransaction'></div>
+    <!-- <div id='newTransaction'>
+        <form id = 'new-transaction-form' data-id=1>
+            <label for="newValue">New Transaction: </label><br>
+            <input type="text" id="newValue" name="newValue" placeholder="Transaction Amount">
+            <input type="submit" value="Submit">
+        </form>
+    </div> -->
+    
+    <br><br><br><br><br><br>
 
     <div id='expenses'>
         <form id = 'expenses-form'>
             <label for="expenseName">Name of Expense: </label><br>
-            <input type="text" id="expenseName" name="expenseName" value="Expense Name"><br>
+            <input type="text" id="expenseName" name="expenseName" placeholder="Expense Name"><br>
 
             <label for="totalExpenseValue">Total Value:</label><br>
-            <input type="text" id="totalExpenseValue" name="totalExpenseValue" value="-$$$"><br>
+            <input type="text" id="totalExpenseValue" name="totalExpenseValue" placeholder="-$$$"><br>
 
             <input type="submit" value="Submit Expense">
         </form>
@@ -29,17 +40,19 @@
     <div id='assets'>
         <form id = 'assets-form'>
             <label for="assetsName">Name of Asset: </label><br>
-            <input type="text" id="assetsName" name="assetsName" value="Asset Name"><br>
+            <input type="text" id="assetsName" name="assetsName" placeholder="Asset Name"><br>
 
             <label for="totalAssetValue">Total Value:</label><br>
-            <input type="text" id="totalAssetValue" name="totalAssetValue" value="$$$"><br>
+            <input type="text" id="totalAssetValue" name="totalAssetValue" placeholder="$$$"><br>
 
             <input type="submit" value="Submit Asset">
         </form>
     </div>
-
+    
     <div id='total'>
-
+        <h3 id="expenseTotal">Asset Total: </h3>
+        <h3 id="assetTotal">Expense Total: </h3>
+        <h2 id="grandTotal">Grand Total: </h2>
     </div>
 
 </body>
