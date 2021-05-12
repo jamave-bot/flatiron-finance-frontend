@@ -14,8 +14,11 @@ let expenseValueInput = document.querySelector('input#totalExpenseValue')
 let newAssetInput = document.querySelector('input#assetsName')
 let assetValueInput = document.querySelector('input#totalAssetValue')
 
+const newsSidebar = document.querySelector('div#sidebar')
+
 
 showFinances()
+addNewsbar ()
 
 function updateTotals() {
     const expenseArray = expensesDiv.querySelectorAll('.itemValue')
@@ -73,10 +76,10 @@ function appendCard(financeObj) {
     const newTrx = div.querySelector('.new-trx-btn')
     //debugger
     newTrx.addEventListener('click',(event) => {
-        console.log(financeObj.name)
+        //console.log(financeObj.name)
         newTransaction.innerHTML = `
             <form id = 'new-transaction-form' data-id='${financeObj.id}'>
-                <label>${financeObj.description} : ${financeObj.name}</label><br>
+                <strong>${financeObj.description} : ${financeObj.name}</strong><br>
                 <label for="newValue">New Transaction: </label><br>
                 <input type="text" id="newValue" name="newValue" placeholder="Transaction Amount">
                 <input type="submit" value="Submit">
@@ -91,8 +94,8 @@ function addTransaction (financeObj) {
     newTransactForm.addEventListener ('submit', (event) => {
         event.preventDefault()
         const newTransactionValue = financeObj.value + (parseInt(event.target.newValue.value) || 0)
-        console.log(newTransactionValue)
-        console.log(financeObj.value)
+        //console.log(newTransactionValue)
+        //console.log(financeObj.value)
         //console.log(newTransactionValue)
         fetch(`http://localhost:3000/finances/${newTransactForm.dataset.id}`,
             {method: "PATCH",
@@ -129,8 +132,8 @@ assetsForm.addEventListener('submit', (evt) => {
     let newAsset = newAssetInput.value
     let sanitizedAssetValue = assetValueInput.value.replace(/[^0-9]+/g, '')
     let assetValue = parseInt(sanitizedAssetValue)
-    console.log(assetValue)
-    console.log(typeof assetValue)
+    //console.log(assetValue)
+    //console.log(typeof assetValue)
     if (sanitizedAssetValue === '' || newAsset === '') {
         alert('Your Name or Value inputs are not valid. Please enter a valid name and value.')
         return
@@ -153,4 +156,30 @@ function fetchPost(type, input, valueofInput){
     })
     .then((res) => res.json())
     .then(newObj => { appendCard (newObj)})
+}
+
+function addNewsbar () {
+    fetch('https://cloud.iexapis.com/stable/stock/market/news/?token=pk_382320c691574fe9899938299190ecd7')
+    .then(res => res.json())
+    .then(newsArr => {
+        newsArr.forEach(newsObj => { 
+            const newsDiv = document.createElement('div')
+            const newsLink = document.createElement('a')
+            const newsImg = document.createElement('img')
+            const newsSummaryP = document.createElement('p')
+
+            newsDiv.className.className = 'newsDiv'
+            newsLink.href = newsObj.url
+            newsLink.innerText = newsObj.headline
+            newsLink.className = 'newslink'
+            newsImg.src = newsObj.image
+            newsImg.className = 'newsimg'
+            newsSummaryP.innerText = newsObj.summary
+            newsSummaryP.className = 'summaryP'
+
+
+            newsDiv.append(newsLink, newsSummaryP, newsImg)
+            newsSidebar.append(newsDiv)
+        })
+    })
 }
