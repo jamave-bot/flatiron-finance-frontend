@@ -48,6 +48,7 @@ function showFinances(){
         .then(res => res.json())
         .then((financeArr)=>{
             financeArr.forEach((financeObj) => {appendCard(financeObj)})
+            renderChart()
         })    
 }
 
@@ -201,7 +202,7 @@ function addNewsbar () {
             const newsImg = document.createElement('img')
             const newsSummaryP = document.createElement('p')
 
-            newsDiv.className.className = 'newsDiv'
+            newsDiv.className = 'newsDiv'
             newsLink.href = newsObj.url
             newsLink.innerText = newsObj.headline
             newsLink.className = 'newslink'
@@ -211,7 +212,7 @@ function addNewsbar () {
             newsSummaryP.className = 'summaryP'
 
 
-            newsDiv.append(newsLink, newsSummaryP, newsImg)
+            newsDiv.append(newsImg, newsSummaryP, newsLink)
             newsSidebar.append(newsDiv)
         })
     })
