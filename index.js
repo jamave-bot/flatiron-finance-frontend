@@ -67,21 +67,33 @@ assetsForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     let newAssetInput = document.querySelector('input#assetsName').value
     let valueOfAsset = parseInt(document.querySelector('input#totalAssetValue').value)
-
     fetch(`http://localhost:3000/finances`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            asset: newAssetInput,
+            name: newAssetInput,
             description: 'asset',
             value: valueOfAsset
         }),
         })
         .then((res) => res.json())
-        .then(res => {
-
+        .then((assetObj) => {
+            let div = document.createElement('div');
+            div.className = 'card'
+            div.innerHTML = `
+            <h3>Name of Asset: </h3>
+            <h1> ${assetObj.name} </h1>
+            <h3>Value: </h3>
+            <h1> ${assetObj.value} </h1>
+            <button> X </button> 
+            `
+            div.querySelector('button').addEventListener('click', ()=> {    
+                deleteObj(assetObj)
+                div.innerHTML = ''
+            });
+            assetsSpan.append(div)
         });
 
 

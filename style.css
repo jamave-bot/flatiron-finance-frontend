@@ -4,7 +4,6 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
-    
   }
 
 body h4{
@@ -15,10 +14,14 @@ body h4{
     text-shadow: 5px 5px 0px white;
 }
 
+input{
+    opacity: 80%;
+}
+
 body h2{
     font-style: italic;
-    color:black;
-    text-shadow: 1px 1px 0px white;
+    color:white;
+    text-shadow: 1px 1px 0px black;
     font-size: 2.5em;
 }
 
