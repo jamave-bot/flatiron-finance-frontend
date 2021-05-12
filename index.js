@@ -18,6 +18,8 @@ let assetValueInput = document.querySelector('input#totalAssetValue')
 
 const newsSidebar = document.querySelector('div#sidebar')
 
+let chartData = []
+const chartLabels = ['Expenses', 'Assets']
 
 showFinances()
 addNewsbar ()
