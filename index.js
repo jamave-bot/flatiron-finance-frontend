@@ -106,6 +106,8 @@ function appendCard(financeObj) {
     addTransaction(financeObj)
     });    
     updateTotals()
+    chartData = updateTotals()
+
 }
 
 String.prototype.capitalize = function() {
@@ -145,6 +147,8 @@ function addTransaction (financeObj) {
             newTransactForm.innerHTML = ''
         })
     })
+    chartData = updateTotals()
+
 }
     
 expensesForm.addEventListener('submit', (evt) => {
