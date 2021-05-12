@@ -12,21 +12,16 @@ const grandTotalh2 = document.querySelector('h2#grandTotal')
 showFinances()
 
 function updateTotals() {
-    console.log('hi')
     const expenseArray = expensesDiv.querySelectorAll('.itemValue')
-    console.log(expenseArray)
     let expenseTotal = 0
     for (value of expenseArray) {
-        debugger
         expenseTotal += parseInt(value.innerText)
-        console.log(expenseTotal)
     }
     
     const assetArray = assetsDiv.querySelectorAll('.itemValue')
     let assetTotal = 0 
     for (value of assetArray) {
         assetTotal += parseInt(value.innerText)
-        console.log(assetTotal)
     }
     
     const grandTotal = parseInt(expenseTotal) + parseInt(assetTotal)
@@ -41,10 +36,11 @@ function showFinances(){
         .then((financeArr)=>{
             financeArr.forEach(financeObj => {
                 let div
-                if (financeObj.description === 'asset'){
+                if (financeObj.description === 'Asset'){
                     div = document.createElement('div');
                     div.dataset.id = financeObj.id
                     div.innerHTML = `
+                    <h3 class='new-trx-h3'>New Transaction</h3><button class='new-trx-btn'>+</button><br>
                     <h3>Name of Asset: </h3>
                     <h1> ${financeObj.name} </h1>
                     <h3>Value: </h3>
@@ -56,6 +52,7 @@ function showFinances(){
                     div = document.createElement('div');
                     div.dataset.id = financeObj.id
                     div.innerHTML = `
+                    <h3 class='new-trx-h3'>New Transaction</h3><button class='new-trx-btn'>+</button><br>
                     <h3>Name of Expense: </h3>
                     <h1> ${financeObj.name} </h1>
                     <h3>Value: </h3>
@@ -63,10 +60,13 @@ function showFinances(){
                     `
                     expensesDiv.append(div)
                 }
-               
-                div.addEventListener('click',(event) => {
+                const newTrx = div.querySelector('.new-trx-btn')
+                //debugger
+                newTrx.addEventListener('click',(event) => {
+                    console.log(financeObj.name)
                     newTransaction.innerHTML = `
                         <form id = 'new-transaction-form' data-id='${financeObj.id}'>
+                            <label>${financeObj.description} : ${financeObj.name}</label><br>
                             <label for="newValue">New Transaction: </label><br>
                             <input type="text" id="newValue" name="newValue" placeholder="Transaction Amount">
                             <input type="submit" value="Submit">
@@ -83,6 +83,8 @@ function addTransaction (financeObj) {
     newTransactForm.addEventListener ('submit', (event) => {
         event.preventDefault()
         const newTransactionValue = financeObj.value + (parseInt(event.target.newValue.value) || 0)
+        console.log(newTransactionValue)
+        console.log(financeObj.value)
         //console.log(newTransactionValue)
         fetch(`http://localhost:3000/finances/${newTransactForm.dataset.id}`,
             {method: "PATCH",
@@ -93,6 +95,7 @@ function addTransaction (financeObj) {
         .then(res => res.json())
         .then((newValue) => {
             document.querySelector(`div[data-id = "${financeObj.id}"] .itemValue`).innerText = newValue.value
+            financeObj.value = newValue.value
             newTransactForm.innerHTML = ''
             updateTotals()
         })
