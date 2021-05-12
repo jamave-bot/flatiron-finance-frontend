@@ -214,3 +214,30 @@ function addNewsbar () {
         })
     })
 }
+
+
+function renderChart() {
+
+    const ctx = document.getElementById('myChart');
+        const data = {
+            labels: chartLabels,
+            datasets: [{
+                label: 'My First Dataset',
+                data: chartData,
+                backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)'
+                ],
+                hoverOffset: 4,
+                radius: 500
+            }]
+        };
+        const config = {
+            type: 'doughnut',
+            data: data,
+        };
+        const myChart = new Chart(
+            document.getElementById('myChart'),
+            config
+        );
+    }
