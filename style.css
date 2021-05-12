@@ -23,6 +23,9 @@ body h2{
     color:white;
     text-shadow: 1px 1px 0px black;
     font-size: 2.5em;
+    text-align: center;
+    background-color: #918e8e;
+    opacity: 90%;
 }
 
 .card {
@@ -64,4 +67,26 @@ label{
 #total * {
     display: inline-flex;
     width: 33%;
+    background-color: #918e8e;
+}
+
+#total h3{
+    font-style: italic;
+    color:white;
+    text-shadow: 1px 1px 0px black;
+    font-size: 2.5em;
+}
+#total h2{
+    background-color: #918e8e;
+    font-style: italic;
+    color:white;
+    text-shadow: 1px 1px 0px black;
+    font-size: 2.5em;
+}
+
+#new-transaction-form strong{
+    font-style: italic;
+    color:white;
+    text-shadow: 1px 1px 0px black;
+    font-size: 2.5em;
 }

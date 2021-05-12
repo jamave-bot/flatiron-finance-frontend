@@ -42,14 +42,10 @@ function updateTotals() {
 } 
 
 function showFinances(){
-    console.log("ye this is being called")
     fetch('http://localhost:3000/finances')
         .then(res => res.json())
         .then((financeArr)=>{
-            financeArr.forEach((financeObj) => {
-                appendCard(financeObj)
-                console.log(`got ${financeObj}`)
-            })
+            financeArr.forEach((financeObj) => {appendCard(financeObj)})
         })    
 }
 
@@ -99,7 +95,7 @@ function appendCard(financeObj) {
         //console.log(financeObj.name)
         newTransaction.innerHTML = `
             <form id = 'new-transaction-form' data-id='${financeObj.id}'>
-                <strong>${financeObj.description} : ${financeObj.name}</strong><br>
+                <strong>${financeObj.description.capitalize()} : ${financeObj.name}</strong><br>
                 <label for="newValue">New Transaction: </label><br>
                 <input type="text" id="newValue" name="newValue" placeholder="Transaction Amount">
                 <input type="submit" value="Submit">
@@ -109,12 +105,18 @@ function appendCard(financeObj) {
     updateTotals()
 }
 
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1)
+}
 function deleteObj(financeObj){
     fetch(`http://localhost:3000/finances/${financeObj.id}`, {
         method: "DELETE",
     })
-    // .then(res => res.json())
-    .then(()=> console.log('deleted it'))
+    .then(res => res.json())
+    .then((deletedObj)=> {
+        updateTotals();
+        console.log(`deleted ${deletedObj}`)
+    })
 }
 
 
@@ -136,8 +138,8 @@ function addTransaction (financeObj) {
         .then((newValue) => {
             document.querySelector(`div[data-id = "${financeObj.id}"] .itemValue`).innerText = newValue.value
             financeObj.value = newValue.value
-            newTransactForm.innerHTML = ''
             updateTotals()
+            newTransactForm.innerHTML = ''
         })
     })
 }
