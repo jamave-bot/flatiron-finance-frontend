@@ -200,7 +200,8 @@ const ctx = document.getElementById('myChart');
                 'rgb(255, 99, 132)',
                 'rgb(54, 162, 235)'
             ],
-            hoverOffset: 4
+            hoverOffset: 4,
+            radius: 500
         }]
     };
     const config = {
