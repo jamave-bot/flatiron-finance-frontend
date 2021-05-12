@@ -1,3 +1,4 @@
+//document.addEventListener('DOMContentLoaded', event => {
 const nameDiv = document.getElementById('name');
 const expensesDiv = document.getElementById('expenses');
 const assetsDiv = document.getElementById('assets');
@@ -15,7 +16,8 @@ let newAssetInput = document.querySelector('input#assetsName')
 let assetValueInput = document.querySelector('input#totalAssetValue')
 
 const newsSidebar = document.querySelector('div#sidebar')
-
+let chartData = []
+const chartLabels = ['Expenses', 'Assets']
 
 showFinances()
 addNewsbar ()
@@ -37,6 +39,7 @@ function updateTotals() {
     expenseTotalh3.innerText = `Expense Total: ${expenseTotal}`
     assetTotalh3.innerText = `Asset Total: ${assetTotal}`
     grandTotalh2.innerText = `Grand Total: ${grandTotal}`
+    return [expenseTotal, assetTotal]
 } 
 
 function showFinances(){
@@ -44,6 +47,8 @@ function showFinances(){
         .then(res => res.json())
         .then((financeArr)=>{
             financeArr.forEach(financeObj => {appendCard(financeObj)})
+            //console.log(chartData)
+            renderChart()
         })    
 }
 
@@ -53,7 +58,7 @@ function appendCard(financeObj) {
         div = document.createElement('div');
         div.dataset.id = financeObj.id
         div.innerHTML = `
-        <h3 class='new-trx-h3'>New Transaction</h3><button class='new-trx-btn'>+</button><br>
+        <span class='new-trx-span'>New Transaction</span><button class='new-trx-btn'>+</button><br>
         <h3>Name of Asset: </h3>
         <h1> ${financeObj.name} </h1>
         <h3>Value: </h3>
@@ -65,7 +70,7 @@ function appendCard(financeObj) {
         div = document.createElement('div');
         div.dataset.id = financeObj.id
         div.innerHTML = `
-        <h3 class='new-trx-h3'>New Transaction</h3><button class='new-trx-btn'>+</button><br>
+        <span class='new-trx-span'>New Transaction</span><button class='new-trx-btn'>+</button><br>
         <h3>Name of Expense: </h3>
         <h1> ${financeObj.name} </h1>
         <h3>Value: </h3>
@@ -86,7 +91,7 @@ function appendCard(financeObj) {
             </form>`
     addTransaction(financeObj)
     });    
-    updateTotals()
+    chartData = updateTotals()
 }
 
 function addTransaction (financeObj) {
@@ -108,7 +113,7 @@ function addTransaction (financeObj) {
             document.querySelector(`div[data-id = "${financeObj.id}"] .itemValue`).innerText = newValue.value
             financeObj.value = newValue.value
             newTransactForm.innerHTML = ''
-            updateTotals()
+            chartData = updateTotals()
         })
     })
 }
@@ -183,3 +188,28 @@ function addNewsbar () {
         })
     })
 }
+function renderChart() {
+
+const ctx = document.getElementById('myChart');
+    const data = {
+        labels: chartLabels,
+        datasets: [{
+            label: 'My First Dataset',
+            data: chartData,
+            backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)'
+            ],
+            hoverOffset: 4
+        }]
+    };
+    const config = {
+        type: 'doughnut',
+        data: data,
+    };
+    const myChart = new Chart(
+        document.getElementById('myChart'),
+        config
+    );
+}
+//})
