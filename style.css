@@ -61,3 +61,7 @@ span{
 label{
     color: white;
 }
+#total * {
+    display: inline-flex;
+    width: 33%;
+}
