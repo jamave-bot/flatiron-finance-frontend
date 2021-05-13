@@ -64,18 +64,18 @@ span{
 label{
     color: white;
 }
-#total * {
-    display: inline-flex;
+.total {
+    /* display: inline-flex; */
     width: 33%;
     background-color: #918e8e;
-}
-
-#total h3{
     font-style: italic;
     color:white;
     text-shadow: 1px 1px 0px black;
     font-size: 2.5em;
+    text-align: center;
+    /* align-content: center; */
 }
+
 #total h2{
     background-color: #918e8e;
     font-style: italic;
@@ -84,7 +84,7 @@ label{
     font-size: 2.5em;
 }
 
-#new-transaction-form strong{
+#new-transaction-form strong {
     font-style: italic;
     color:white;
     text-shadow: 1px 1px 0px black;
@@ -101,3 +101,31 @@ label{
     background-color: #918e8e;
     opacity: 90%;
 }
+
+div#newTransaction {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+    height: 8em;
+    background-color:  #918e8e;
+    text-align: center;
+    display: none;
+    }
+
+    div#newTransaction label,input {
+        font-size: 15pt;
+        margin-top: 10px;
+    }
+
+    div#newTransaction button {
+        position: absolute;
+        font-size: 10pt;
+        top: 0;
+        right: 0;
+    }
+
+    div#pie-chart {
+        width: 50%;
+    }
