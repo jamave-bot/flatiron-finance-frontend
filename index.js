@@ -38,9 +38,9 @@ function updateTotals() {
     }
     
     const grandTotal = parseInt(assetTotal) - parseInt(expenseTotal)
-    expenseTotalh3.innerText = `Expense Total: ${expenseTotal}`
-    assetTotalh3.innerText = `Asset Total: ${assetTotal}`
-    grandTotalh2.innerText = `Grand Total: ${grandTotal}`
+    expenseTotalh3.innerText = `Total Expenses: ${expenseTotal}`
+    assetTotalh3.innerText = `Total Assets: ${assetTotal}`
+    grandTotalh2.innerText = `Net Assets: ${grandTotal}`
 } 
 
 function showFinances(){
@@ -54,10 +54,10 @@ function showFinances(){
 
 function appendCard(financeObj) {
     let div
-    if (financeObj.description === 'asset'){
-        div = document.createElement('div');
-        div.dataset.id = financeObj.id
-        div.className = 'card'
+    div = document.createElement('div');
+    div.dataset.id = financeObj.id
+    div.className = 'card'
+    if (financeObj.description.toLowerCase() === 'asset'){
         div.innerHTML = `
         <h3>Name of Asset: </h3>
         <h1> ${financeObj.name} </h1>
@@ -67,16 +67,8 @@ function appendCard(financeObj) {
         <h1><button class='new-trx-btn'>+</button></h1>
         <button id = 'deleteBtn'> X </button> 
         `
-        div.querySelector('button#deleteBtn').addEventListener('click', ()=> {    
-            deleteObj(financeObj)
-            div.remove()
-        });
         assetsSpan.append(div)
-    }
-    else{
-        div = document.createElement('div');
-        div.dataset.id = financeObj.id
-        div.className = 'card'
+    } else {
         div.innerHTML = `
         <h3>Name of Expense: </h3>
         <h1> ${financeObj.name} </h1>
@@ -86,26 +78,32 @@ function appendCard(financeObj) {
         <h1><button class='new-trx-btn'>+</button></h1>
         <button id = 'deleteBtn'> X </button> 
         `
-        div.querySelector('button#deleteBtn').addEventListener('click', ()=> {    
-            deleteObj(financeObj)
-            div.remove()
-        });
         expensesSpan.append(div)
     }
+    div.querySelector('button#deleteBtn').addEventListener('click', ()=> {    
+        deleteObj(financeObj)
+        div.remove()
+    });
     const newTrx = div.querySelector('.new-trx-btn')
     //debugger
     newTrx.addEventListener('click',(event) => {
         //console.log(financeObj.name)
+        newTransaction.style.display = 'block'
         newTransaction.innerHTML = `
             <form id = 'new-transaction-form' data-id='${financeObj.id}'>
-                <strong>${financeObj.description.capitalize()} : ${financeObj.name}</strong><br>
+                <strong>${financeObj.description.capitalize()} : ${financeObj.name}</strong><button>x</button><br>
                 <label for="newValue">New Transaction: </label><br>
                 <input type="text" id="newValue" name="newValue" placeholder="Transaction Amount">
                 <input type="submit" value="Submit">
             </form>`
+    const deleteBtn = newTransaction.querySelector('button')
+    deleteBtn.addEventListener('click',(event) => {
+        newTransactForm.innerHTML = ''
+        newTransaction.style.display = 'none'
+    })
     addTransaction(financeObj)
     });    
-    updateTotals()
+    //updateTotals()
     chartData = updateTotals()
 
 }
@@ -145,6 +143,7 @@ function addTransaction (financeObj) {
             updateTotals()
             newTransactForm.innerHTML = ''
             updateTotals()
+            newTransaction.style.display = 'none'
         })
     })
     chartData = updateTotals()
@@ -160,7 +159,7 @@ expensesForm.addEventListener('submit', (evt) => {
         alert('Your Name or Value input are not valid. Please enter a valid name and value.')
         return
     }
-    fetchPost('expense', newExpense, expenseValue)
+    fetchPost('Expense', newExpense, expenseValue)
     evt.target.reset()
 })
 
@@ -176,7 +175,7 @@ assetsForm.addEventListener('submit', (evt) => {
         alert('Your Name or Value inputs are not valid. Please enter a valid name and value.')
         return
     }
-    fetchPost('asset', newAsset, assetValue)
+    fetchPost('Asset', newAsset, assetValue)
     evt.target.reset()
 })
     
