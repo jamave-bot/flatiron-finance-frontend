@@ -125,3 +125,7 @@ div#newTransaction {
         top: 0;
         right: 0;
     }
+
+    div#pie-chart {
+        width: 50%;
+    }

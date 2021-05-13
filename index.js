@@ -18,7 +18,15 @@ let assetValueInput = document.querySelector('input#totalAssetValue')
 
 const newsSidebar = document.querySelector('div#sidebar')
 
+const ctx = document.getElementById('myChart');
+let myChart
+let config
+let chartDataObj
 let chartData = []
+const chartBackgroundColor = [
+    'rgb(255, 99, 132)',
+    'rgb(54, 162, 235)'
+]
 const chartLabels = ['Expenses', 'Assets']
 
 showFinances()
@@ -41,14 +49,18 @@ function updateTotals() {
     expenseTotalh3.innerText = `Total Expenses: ${expenseTotal}`
     assetTotalh3.innerText = `Total Assets: ${assetTotal}`
     grandTotalh2.innerText = `Net Assets: ${grandTotal}`
+    chartData = [expenseTotal, assetTotal]
+    chartDataObj.data = chartData
+    updatePieChart(chartData)
 } 
 
 function showFinances(){
     fetch('http://localhost:3000/finances')
         .then(res => res.json())
-        .then((financeArr)=>{
+        .then((financeArr)=>{           
             financeArr.forEach((financeObj) => {appendCard(financeObj)})
             renderChart()
+            updateTotals()
         })    
 }
 
@@ -81,6 +93,9 @@ function appendCard(financeObj) {
         expensesSpan.append(div)
     }
     div.querySelector('button#deleteBtn').addEventListener('click', ()=> {    
+        if (!confirm(`Are you sure you want to delete your ${financeObj.name} ${financeObj.description}?`)) {
+            return
+        }
         deleteObj(financeObj)
         div.remove()
     });
@@ -96,16 +111,12 @@ function appendCard(financeObj) {
                 <input type="text" id="newValue" name="newValue" placeholder="Transaction Amount">
                 <input type="submit" value="Submit">
             </form>`
-    const deleteBtn = newTransaction.querySelector('button')
-    deleteBtn.addEventListener('click',(event) => {
-        newTransactForm.innerHTML = ''
-        newTransaction.style.display = 'none'
-    })
-    addTransaction(financeObj)
+        newTransaction.querySelector('button').addEventListener('click',(event) => {
+            newTransactForm.innerHTML = ''
+            newTransaction.style.display = 'none'
+        })
+        addTransaction(financeObj)
     });    
-    //updateTotals()
-    chartData = updateTotals()
-
 }
 
 String.prototype.capitalize = function() {
@@ -140,14 +151,11 @@ function addTransaction (financeObj) {
         .then((newValue) => {
             document.querySelector(`div[data-id = "${financeObj.id}"] .itemValue`).innerText = newValue.value
             financeObj.value = newValue.value
-            updateTotals()
             newTransactForm.innerHTML = ''
-            updateTotals()
             newTransaction.style.display = 'none'
+            updateTotals()
         })
     })
-    chartData = updateTotals()
-
 }
     
 expensesForm.addEventListener('submit', (evt) => {
@@ -192,7 +200,10 @@ function fetchPost(type, input, valueofInput){
     }),
     })
     .then((res) => res.json())
-    .then(newObj => { appendCard (newObj)})
+    .then(newObj => { 
+        appendCard (newObj)
+        updateTotals()
+    })
 }
 
 function addNewsbar () {
@@ -223,27 +234,31 @@ function addNewsbar () {
 
 
 function renderChart() {
+    chartDataObj = {
+        labels: chartLabels,
+        datasets: [{
+            label: chartLabels,
+            data: chartData,
+            backgroundColor: chartBackgroundColor,
+            hoverOffset: 4,
+        }]
+    };
+    config = {
+        type: 'doughnut',
+        data: chartDataObj,
+    };
+    myChart = new Chart(
+        document.getElementById('myChart'),
+        config
+    );
+}
 
-    const ctx = document.getElementById('myChart');
-        const data = {
-            labels: chartLabels,
-            datasets: [{
-                label: 'My First Dataset',
-                data: chartData,
-                backgroundColor: [
-                    'rgb(255, 99, 132)',
-                    'rgb(54, 162, 235)'
-                ],
-                hoverOffset: 4,
-                radius: 500
-            }]
-        };
-        const config = {
-            type: 'doughnut',
-            data: data,
-        };
-        const myChart = new Chart(
-            document.getElementById('myChart'),
-            config
-        );
-    }
+function updatePieChart(chart) {
+    myChart.data.datasets.pop();
+    myChart.data.datasets.push({
+      label: chartLabels,
+      backgroundColor: chartBackgroundColor,
+      data: chart
+    });
+    myChart.update();
+  }
