@@ -4,14 +4,18 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
+    background-color: rgb(3, 129, 127);
+    background-blend-mode: hard-light;
   }
 
 body h4{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 5em;
     text-align: center;
-    font-style: italic;
-    color:black;
-    text-shadow: 5px 5px 0px white;
+    font-style: bold;
+    color:rgb(252, 250, 250);
+    text-shadow: 1px 1px 0px black;
+    
 }
 
 input{
@@ -19,12 +23,13 @@ input{
 }
 
 body h2{
-    font-style: italic;
-    color:white;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-style: bold;
+    color: rgb(252, 250, 250);
     text-shadow: 1px 1px 0px black;
-    font-size: 2.5em;
+    font-size: 55px;
     text-align: center;
-    background-color: #918e8e;
+    
     opacity: 90%;
 }
 
@@ -128,4 +133,25 @@ div#newTransaction {
 
     div#pie-chart {
         width: 50%;
+    }
+
+    form#expenses-form {
+        text-align: center;
+    }
+
+    form#assets-form {
+        text-align: center;
+    }
+
+    input {
+        background-color: rgb(249, 250, 252);
+
+    }
+
+    div.newsDiv {
+        text-align: center;
+    }
+
+    a.newslink {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
     }
