@@ -41,6 +41,7 @@ function updateTotals() {
     expenseTotalh3.innerText = `Expense Total: ${expenseTotal}`
     assetTotalh3.innerText = `Asset Total: ${assetTotal}`
     grandTotalh2.innerText = `Grand Total: ${grandTotal}`
+    return [expenseTotal, assetTotal]
 } 
 
 function showFinances(){
@@ -145,9 +146,10 @@ function addTransaction (financeObj) {
             financeObj.value = newValue.value
             updateTotals()
             newTransactForm.innerHTML = ''
+            updateTotals()
+            chartData = updateTotals()
         })
     })
-    chartData = updateTotals()
 
 }
     
