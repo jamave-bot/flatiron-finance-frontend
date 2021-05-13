@@ -180,6 +180,10 @@ p.summaryP{
     background-color: #a3a3a3;
 } */
 
+.newsDiv{
+    margin-bottom: 100px;
+}
+
 #sidebar{
     height: 100%; /* 100% Full-height */
     width: 0; /* 0 width - change this with JavaScript */
