@@ -1,10 +1,11 @@
-//document.addEventListener('DOMContentLoaded', event => {
 const nameDiv = document.getElementById('name');
 const expensesDiv = document.getElementById('expenses');
 const assetsDiv = document.getElementById('assets');
 const totalDiv = document.getElementById('total');
 const expensesForm = document.getElementById('expenses-form'); 
 const assetsForm = document.getElementById('assets-form');
+const expensesSpan = document.getElementById('expenses-span')
+const assetsSpan = document.getElementById('assets-span')
 
 const expenseTotalh3 = document.querySelector('h3#expenseTotal')
 const assetTotalh3 = document.querySelector('h3#assetTotal')
@@ -16,82 +17,120 @@ let newAssetInput = document.querySelector('input#assetsName')
 let assetValueInput = document.querySelector('input#totalAssetValue')
 
 const newsSidebar = document.querySelector('div#sidebar')
+
+const ctx = document.getElementById('myChart');
+let myChart
+let config
+let chartDataObj
 let chartData = []
+const chartBackgroundColor = [
+    'rgb(255, 99, 132)',
+    'rgb(54, 162, 235)'
+]
 const chartLabels = ['Expenses', 'Assets']
 
 showFinances()
 addNewsbar ()
 
 function updateTotals() {
-    const expenseArray = expensesDiv.querySelectorAll('.itemValue')
+    const expenseArray = expensesSpan.querySelectorAll('.itemValue')
     let expenseTotal = 0
     for (value of expenseArray) {
         expenseTotal += parseInt(value.innerText)
     }
     
-    const assetArray = assetsDiv.querySelectorAll('.itemValue')
+    const assetArray = assetsSpan.querySelectorAll('.itemValue')
     let assetTotal = 0 
     for (value of assetArray) {
         assetTotal += parseInt(value.innerText)
     }
     
-    const grandTotal = parseInt(expenseTotal) + parseInt(assetTotal)
-    expenseTotalh3.innerText = `Expense Total: ${expenseTotal}`
-    assetTotalh3.innerText = `Asset Total: ${assetTotal}`
-    grandTotalh2.innerText = `Grand Total: ${grandTotal}`
-    return [expenseTotal, assetTotal]
+    const grandTotal = parseInt(assetTotal) - parseInt(expenseTotal)
+    expenseTotalh3.innerText = `Total Expenses: ${expenseTotal}`
+    assetTotalh3.innerText = `Total Assets: ${assetTotal}`
+    grandTotalh2.innerText = `Net Assets: ${grandTotal}`
+    chartData = [expenseTotal, assetTotal]
+    chartDataObj.data = chartData
+    updatePieChart(chartData)
 } 
 
 function showFinances(){
     fetch('http://localhost:3000/finances')
         .then(res => res.json())
-        .then((financeArr)=>{
-            financeArr.forEach(financeObj => {appendCard(financeObj)})
-            //console.log(chartData)
+        .then((financeArr)=>{           
+            financeArr.forEach((financeObj) => {appendCard(financeObj)})
             renderChart()
+            updateTotals()
         })    
 }
 
 function appendCard(financeObj) {
     let div
-    if (financeObj.description === 'Asset'){
-        div = document.createElement('div');
-        div.dataset.id = financeObj.id
+    div = document.createElement('div');
+    div.dataset.id = financeObj.id
+    div.className = 'card'
+    if (financeObj.description.toLowerCase() === 'asset'){
         div.innerHTML = `
-        <span class='new-trx-span'>New Transaction</span><button class='new-trx-btn'>+</button><br>
         <h3>Name of Asset: </h3>
         <h1> ${financeObj.name} </h1>
         <h3>Value: </h3>
         <h1 class='itemValue'> ${financeObj.value} </h1>
+        <h3 class='new-trx-h3'>New Transaction</h3>
+        <h1><button class='new-trx-btn'>+</button></h1>
+        <button id = 'deleteBtn'> X </button> 
         `
-        assetsDiv.append(div)
-    }
-    else{
-        div = document.createElement('div');
-        div.dataset.id = financeObj.id
+        assetsSpan.append(div)
+    } else {
         div.innerHTML = `
-        <span class='new-trx-span'>New Transaction</span><button class='new-trx-btn'>+</button><br>
         <h3>Name of Expense: </h3>
         <h1> ${financeObj.name} </h1>
         <h3>Value: </h3>
         <h1 class='itemValue'> ${financeObj.value} </h1>
+        <h3 class='new-trx-h3'>New Transaction</h3>
+        <h1><button class='new-trx-btn'>+</button></h1>
+        <button id = 'deleteBtn'> X </button> 
         `
-        expensesDiv.append(div)
+        expensesSpan.append(div)
     }
+    div.querySelector('button#deleteBtn').addEventListener('click', ()=> {    
+        if (!confirm(`Are you sure you want to delete your ${financeObj.name} ${financeObj.description}?`)) {
+            return
+        }
+        deleteObj(financeObj)
+        div.remove()
+    });
     const newTrx = div.querySelector('.new-trx-btn')
     //debugger
     newTrx.addEventListener('click',(event) => {
         //console.log(financeObj.name)
+        newTransaction.style.display = 'block'
         newTransaction.innerHTML = `
             <form id = 'new-transaction-form' data-id='${financeObj.id}'>
-                <strong>${financeObj.description} : ${financeObj.name}</strong><br>
+                <strong>${financeObj.description.capitalize()} : ${financeObj.name}</strong><button>x</button><br>
                 <label for="newValue">New Transaction: </label><br>
                 <input type="text" id="newValue" name="newValue" placeholder="Transaction Amount">
                 <input type="submit" value="Submit">
             </form>`
-    addTransaction(financeObj)
+        newTransaction.querySelector('button').addEventListener('click',(event) => {
+            newTransactForm.innerHTML = ''
+            newTransaction.style.display = 'none'
+        })
+        addTransaction(financeObj)
     });    
-    chartData = updateTotals()
+}
+
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1)
+}
+function deleteObj(financeObj){
+    fetch(`http://localhost:3000/finances/${financeObj.id}`, {
+        method: "DELETE",
+    })
+    .then(res => res.json())
+    .then((deletedObj)=> {
+        updateTotals();
+        console.log(`deleted ${deletedObj}`)
+    })
 }
 
 function addTransaction (financeObj) {
@@ -113,7 +152,8 @@ function addTransaction (financeObj) {
             document.querySelector(`div[data-id = "${financeObj.id}"] .itemValue`).innerText = newValue.value
             financeObj.value = newValue.value
             newTransactForm.innerHTML = ''
-            chartData = updateTotals()
+            newTransaction.style.display = 'none'
+            updateTotals()
         })
     })
 }
@@ -160,7 +200,10 @@ function fetchPost(type, input, valueofInput){
     }),
     })
     .then((res) => res.json())
-    .then(newObj => { appendCard (newObj)})
+    .then(newObj => { 
+        appendCard (newObj)
+        updateTotals()
+    })
 }
 
 function addNewsbar () {
@@ -173,7 +216,7 @@ function addNewsbar () {
             const newsImg = document.createElement('img')
             const newsSummaryP = document.createElement('p')
 
-            newsDiv.className.className = 'newsDiv'
+            newsDiv.className = 'newsDiv'
             newsLink.href = newsObj.url
             newsLink.innerText = newsObj.headline
             newsLink.className = 'newslink'
@@ -183,34 +226,39 @@ function addNewsbar () {
             newsSummaryP.className = 'summaryP'
 
 
-            newsDiv.append(newsLink, newsSummaryP, newsImg)
+            newsDiv.append(newsImg, newsSummaryP, newsLink)
             newsSidebar.append(newsDiv)
         })
     })
 }
-function renderChart() {
 
-const ctx = document.getElementById('myChart');
-    const data = {
+
+function renderChart() {
+    chartDataObj = {
         labels: chartLabels,
         datasets: [{
-            label: 'My First Dataset',
+            label: chartLabels,
             data: chartData,
-            backgroundColor: [
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)'
-            ],
+            backgroundColor: chartBackgroundColor,
             hoverOffset: 4,
-            radius: 500
         }]
     };
-    const config = {
+    config = {
         type: 'doughnut',
-        data: data,
+        data: chartDataObj,
     };
-    const myChart = new Chart(
+    myChart = new Chart(
         document.getElementById('myChart'),
         config
     );
 }
-//})
+
+function updatePieChart(chart) {
+    myChart.data.datasets.pop();
+    myChart.data.datasets.push({
+      label: chartLabels,
+      backgroundColor: chartBackgroundColor,
+      data: chart
+    });
+    myChart.update();
+  }

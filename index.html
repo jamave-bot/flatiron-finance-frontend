@@ -5,14 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flatiron Finance</title>
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="style.css">
     <script defer src='index.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+
+    <h4>Flatiron Finance</h4>
+
     <div id='name'>
 
     </div>
+    
+    <h2>Expenses</h2>
+    <span id = 'expenses-span'></span>
+    
+    <br>
 
     <div id='expenses'>
         <form id = 'expenses-form'>
@@ -24,12 +32,19 @@
 
             <input type="submit" value="Submit Expense">
         </form>
+        <h3 id="expenseTotal" class='total'></h3>
     </div>
-    <br><br><br>
+    
 
+    <br><br>
     <div id='newTransaction'></div>
+    <br><br>
 
-    <br><br><br>
+
+    <h2>Assets</h2>
+    <span id = 'assets-span'></span>
+    <br>
+
     <div id='assets'>
         <form id = 'assets-form'>
             <label for="assetsName">Name of Asset: </label><br>
@@ -40,21 +55,26 @@
 
             <input type="submit" value="Submit Asset">
         </form>
+        <h3 id="assetTotal" class='total'></h3>
     </div>
-    
+
+
+
+
+
     <div id='total'>
-        <h3 id="expenseTotal"></h3>
-        <h3 id="assetTotal">Expense Total: </h3>
-        <h2 id="grandTotal">Grand Total: </h2>
+        <h2 id="grandTotal"></h2>
     </div>
 
-    <div id = 'sidebar'>
-        
-    </div>
-
-    <div>
+    <div id='pie-chart'>
         <canvas id="myChart"></canvas>
-      </div>
+    </div>
+
+    <div id ='sidebar'>
+
+    </div>
+
+
 
 </body>
 </html>

@@ -1,4 +1,131 @@
-#total * {
-    display: inline-flex;
-    width: 33%;
+
+body {
+    background-image: url('https://www.history.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTU3ODc5MDg3MjM2MTMwNTI3/clouds-over-flatiron-building-nyc-2.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+  }
+
+body h4{
+    font-size: 5em;
+    text-align: center;
+    font-style: italic;
+    color:black;
+    text-shadow: 5px 5px 0px white;
 }
+
+input{
+    opacity: 80%;
+}
+
+body h2{
+    font-style: italic;
+    color:white;
+    text-shadow: 1px 1px 0px black;
+    font-size: 2.5em;
+    text-align: center;
+    background-color: #918e8e;
+    opacity: 90%;
+}
+
+.card {
+    width: 150px;
+    margin-left: 10px;
+    margin-right: 10px;
+    /* border-style: solid;
+    border-radius: 5%; */
+    text-align: center;
+    opacity: 90%;
+}
+
+.card h3{
+    text-align: left;
+    background-color: #CCCBCB ;
+    margin: 0px 0px 0px 0px;
+    font-size: small;
+    font-weight: bold; 
+}
+
+.card button{
+    margin-top: 10px;
+}
+.card h1{
+    background-color: grey;
+    margin: 0px 0px 0px 0px;
+    padding: 20px 0px 20px 0px;
+    font-size: large;
+}
+
+span{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+label{
+    color: white;
+}
+.total {
+    /* display: inline-flex; */
+    width: 33%;
+    background-color: #918e8e;
+    font-style: italic;
+    color:white;
+    text-shadow: 1px 1px 0px black;
+    font-size: 2.5em;
+    text-align: center;
+    /* align-content: center; */
+}
+
+#total h2{
+    background-color: #918e8e;
+    font-style: italic;
+    color:white;
+    text-shadow: 1px 1px 0px black;
+    font-size: 2.5em;
+}
+
+#new-transaction-form strong {
+    font-style: italic;
+    color:white;
+    text-shadow: 1px 1px 0px black;
+    font-size: 2.5em;
+}
+
+.newsimg{
+    height: 20%;
+    width: 20%;
+    align-content: center;
+}
+
+.newsDiv{
+    background-color: #918e8e;
+    opacity: 90%;
+}
+
+div#newTransaction {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+    height: 8em;
+    background-color:  #918e8e;
+    text-align: center;
+    display: none;
+    }
+
+    div#newTransaction label,input {
+        font-size: 15pt;
+        margin-top: 10px;
+    }
+
+    div#newTransaction button {
+        position: absolute;
+        font-size: 10pt;
+        top: 0;
+        right: 0;
+    }
+
+    div#pie-chart {
+        width: 50%;
+    }
