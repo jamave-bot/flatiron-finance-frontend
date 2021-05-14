@@ -262,3 +262,13 @@ function updatePieChart(chart) {
     });
     myChart.update();
   }
+
+  function openNav() {
+    document.getElementById("sidebar").style.width = "250px";
+    document.querySelector("body").style.marginLeft = "250px";
+}
+
+function closeNav() {
+    document.getElementById("sidebar").style.width = "0";
+    document.querySelector("body").style.marginLeft= "0";
+}
