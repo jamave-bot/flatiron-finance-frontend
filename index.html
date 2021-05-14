@@ -25,11 +25,18 @@
     <div id='expenses'>
         <form id = 'expenses-form'>
             <label for="expenseName">Name of Expense: </label><br>
-            <input type="text" id="expenseName" name="expenseName" placeholder="Expense Name"><br>
+            <input type="text" id="expenseName" name="expenseName" placeholder="New Expense Name"><br>
 
             <label for="totalExpenseValue">Total Value:</label><br>
             <input type="text" id="totalExpenseValue" name="totalExpenseValue" placeholder="-$$$"><br>
-
+            <select name="expenseCategory" id="expenseCategory">
+                <option value="Mortgage">Mortgage</option>
+                <option value="Auto Loan">Auto Loan</option>
+                <option value="Tuition">Tuition</option>
+                <option value="Household Goods">Household Goods</option>
+                <option value="Travel">Travel</option>
+                <option value="Miscellaneous">Miscellaneous</option>
+            </select><br>
             <input type="submit" value="Submit Expense">
         </form>
         <h3 id="expenseTotal" class='total'></h3>
@@ -48,11 +55,18 @@
     <div id='assets'>
         <form id = 'assets-form'>
             <label for="assetsName">Name of Asset: </label><br>
-            <input type="text" id="assetsName" name="assetsName" placeholder="Asset Name"><br>
+            <input type="text" id="assetsName" name="assetsName" placeholder="New Asset Name"><br>
 
             <label for="totalAssetValue">Total Value:</label><br>
             <input type="text" id="totalAssetValue" name="totalAssetValue" placeholder="$$$"><br>
-
+            <select name="assetCategory" id="assetCategory">
+                <option value="Wages">Wages</option>
+                <option value="Gift">Gift</option>
+                <option value="Investment">Investment</option>
+                <option value="Real Estate">Real Estate</option>
+                <option value="Benefits">Benefits</option>
+                <option value="Miscellaneous">Miscellaneous</option>
+            </select><br>
             <input type="submit" value="Submit Asset">
         </form>
         <h3 id="assetTotal" class='total'></h3>
@@ -70,6 +84,10 @@
         <canvas id="myChart"></canvas>
     </div>
 
+    <div id='pie-chart'>
+        <canvas id="myChart"></canvas>
+    </div>
+    <!-- <div id ='sidebar'> -->
     <div id ='sidebar' class='sidebar'>
         <button class="closebtn" onclick="closeNav()">x</button>
     </div>

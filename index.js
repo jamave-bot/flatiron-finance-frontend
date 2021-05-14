@@ -132,7 +132,6 @@ function appendCard(financeObj) {
                 <input type="submit" value="Submit">
             </form>`
         newTransaction.querySelector('button').addEventListener('click',(event) => {
-            newTransactForm.innerHTML = ''
             newTransaction.style.display = 'none'
         })
         addTransaction(financeObj)
@@ -189,11 +188,12 @@ expensesForm.addEventListener('submit', (evt) => {
     let newExpense = newExpenseInput.value
     let sanitizedExpenseValue = expenseValueInput.value.replace(/[^0-9]+/g, '')
     let expenseValue = parseInt(sanitizedExpenseValue)
+    let newCategory = evt.target.expenseCategory.value
     if (sanitizedExpenseValue == '' || newExpense === '') {
         alert('Your Name or Value input are not valid. Please enter a valid name and value.')
         return
     }
-    fetchPost('Expense', newExpense, expenseValue)
+    fetchPost('Expense', newExpense, expenseValue, newCategory)
     evt.target.reset()
 })
 
@@ -203,18 +203,19 @@ assetsForm.addEventListener('submit', (evt) => {
     let newAsset = newAssetInput.value
     let sanitizedAssetValue = assetValueInput.value.replace(/[^0-9]+/g, '')
     let assetValue = parseInt(sanitizedAssetValue)
+    let newCategory = evt.target.assetCategory.value
     //console.log(assetValue)
     //console.log(typeof assetValue)
     if (sanitizedAssetValue === '' || newAsset === '') {
         alert('Your Name or Value inputs are not valid. Please enter a valid name and value.')
         return
     }
-    fetchPost('Asset', newAsset, assetValue)
+    fetchPost('Asset', newAsset, assetValue, newCategory)
     evt.target.reset()
 })
     
-function fetchPost(type, input, valueofInput){
- fetch(`http://localhost:3000/finances`, {
+function fetchPost(type, input, valueofInput, category){
+    fetch(`http://localhost:3000/finances`, {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
@@ -222,7 +223,9 @@ function fetchPost(type, input, valueofInput){
     body: JSON.stringify({
         name: input,
         description: type,
-        value: parseInt(valueofInput)
+        value: parseInt(valueofInput),
+        transactions : {category : category, date : `${new Date().getMonth()}/${new Date().getDate()}`
+        , value : valueofInput}
     }),
     })
     .then((res) => res.json())
