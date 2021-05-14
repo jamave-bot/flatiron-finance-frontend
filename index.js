@@ -18,14 +18,6 @@ let assetValueInput = document.querySelector('input#totalAssetValue')
 
 const newsSidebar = document.querySelector('div#sidebar')
 
-<<<<<<< HEAD
-const ctx = document.getElementById('myChart');
-let myChart
-let config
-let chartDataObj
-let chartData = []
-const chartBackgroundColor = [
-=======
 const expenseSelect = `
 <select name="selectCategory" id="selectCategory">
     <option value="Mortgage">Mortgage</option>
@@ -51,11 +43,10 @@ let assetCategoryArray
 let assetExpensechartDataObj
 let assetExpenseChartData = []
 const assetExpenseChartBackgroundColor = [
->>>>>>> yisrael
     'rgb(255, 99, 132)',
     'rgb(54, 162, 235)'
 ]
-const chartLabels = ['Expenses', 'Assets']
+const assetExpenseChartLabels = ['Expenses', 'Assets']
 
 let expenseCategoryChart
 let expenseCategoryArray
@@ -102,9 +93,9 @@ function updateTotals() {
     expenseTotalh3.innerText = `Total Expenses: ${expenseTotal}`
     assetTotalh3.innerText = `Total Assets: ${assetTotal}`
     grandTotalh2.innerText = `Net Assets: ${grandTotal}`
-    chartData = [expenseTotal, assetTotal]
-    chartDataObj.data = chartData
-    updatePieChart(chartData)
+    assetExpenseChartData = [expenseTotal, assetTotal]
+    //assetExpensechartDataObj.data = assetExpenseChartData
+    updatePieChart(assetExpenseChartData)
 } 
 
 function showFinances(){
@@ -167,11 +158,11 @@ function appendCard(financeObj) {
             <form id = 'new-transaction-form' data-id='${financeObj.id}'>
                 <strong>${financeObj.description.capitalize()} : ${financeObj.name}</strong><button>x</button><br>
                 <label for="newValue">New Transaction: </label><br>
-                <input type="text" id="newValue" name="newValue" placeholder="Transaction Amount">
+                <input type="text" id="newValue" name="newValue" placeholder="Transaction Amount"><br>
+                ${(financeObj.description.toLowerCase() === 'asset')?assetSelect:expenseSelect}<br>
                 <input type="submit" value="Submit">
             </form>`
         newTransaction.querySelector('button').addEventListener('click',(event) => {
-            newTransactForm.innerHTML = ''
             newTransaction.style.display = 'none'
         })
         addTransaction(financeObj)
@@ -197,19 +188,25 @@ function addTransaction (financeObj) {
     newTransactForm.addEventListener ('submit', (event) => {
         event.preventDefault()
         const newTransactionValue = financeObj.value + (parseInt(event.target.newValue.value) || 0)
+        const newCategory = event.target.selectCategory.value
+        const newTrxArr = [...financeObj.transactions]
+        newTrxArr.push({category : newCategory, date : `${new Date().getMonth()}/${new Date().getDate()}`
+        , value : (parseInt(event.target.newValue.value) || 0)})
         //console.log(newTransactionValue)
         //console.log(financeObj.value)
         //console.log(newTransactionValue)
         fetch(`http://localhost:3000/finances/${newTransactForm.dataset.id}`,
             {method: "PATCH",
             headers:{"Content-Type" : "application/json"},
-            body: JSON.stringify({value : parseInt(newTransactionValue)})
+            body: JSON.stringify({value : parseInt(newTransactionValue),
+            transactions : newTrxArr})
             }
         )
         .then(res => res.json())
-        .then((newValue) => {
-            document.querySelector(`div[data-id = "${financeObj.id}"] .itemValue`).innerText = newValue.value
-            financeObj.value = newValue.value
+        .then((newTrxobj) => {
+            document.querySelector(`div[data-id = "${financeObj.id}"] .itemValue`).innerText = newTrxobj.value
+            financeObj.value = newTrxobj.value
+            financeObj.transactions = newTrxobj.transactions
             newTransactForm.innerHTML = ''
             newTransaction.style.display = 'none'
             updateTotals()
@@ -222,11 +219,12 @@ expensesForm.addEventListener('submit', (evt) => {
     let newExpense = newExpenseInput.value
     let sanitizedExpenseValue = expenseValueInput.value.replace(/[^0-9]+/g, '')
     let expenseValue = parseInt(sanitizedExpenseValue)
+    let newCategory = evt.target.expenseCategory.value
     if (sanitizedExpenseValue == '' || newExpense === '') {
         alert('Your Name or Value input are not valid. Please enter a valid name and value.')
         return
     }
-    fetchPost('Expense', newExpense, expenseValue)
+    fetchPost('Expense', newExpense, expenseValue, newCategory)
     evt.target.reset()
 })
 
@@ -236,22 +234,19 @@ assetsForm.addEventListener('submit', (evt) => {
     let newAsset = newAssetInput.value
     let sanitizedAssetValue = assetValueInput.value.replace(/[^0-9]+/g, '')
     let assetValue = parseInt(sanitizedAssetValue)
-<<<<<<< HEAD
-=======
     let newCategory = evt.target.expenseCategoryArray.value
->>>>>>> yisrael
     //console.log(assetValue)
     //console.log(typeof assetValue)
     if (sanitizedAssetValue === '' || newAsset === '') {
         alert('Your Name or Value inputs are not valid. Please enter a valid name and value.')
         return
     }
-    fetchPost('Asset', newAsset, assetValue)
+    fetchPost('Asset', newAsset, assetValue, newCategory)
     evt.target.reset()
 })
     
-function fetchPost(type, input, valueofInput){
- fetch(`http://localhost:3000/finances`, {
+function fetchPost(type, input, valueofInput, category){
+    fetch(`http://localhost:3000/finances`, {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
@@ -259,7 +254,9 @@ function fetchPost(type, input, valueofInput){
     body: JSON.stringify({
         name: input,
         description: type,
-        value: parseInt(valueofInput)
+        value: parseInt(valueofInput),
+        transactions : [{category : category, date : `${new Date().getMonth()}/${new Date().getDate()}`
+        , value : valueofInput}]
     }),
     })
     .then((res) => res.json())
@@ -296,33 +293,25 @@ function addNewsbar () {
 }
 
 
-<<<<<<< HEAD
-function renderChart() {
-    chartDataObj = {
-        labels: chartLabels,
-=======
 function renderCharts() {
     //For Asset VS Expense Pie Chart
     assetExpensechartDataObj = {
         labels: assetExpenseChartLabels,
->>>>>>> yisrael
         datasets: [{
-            label: chartLabels,
-            data: chartData,
-            backgroundColor: chartBackgroundColor,
+            label: 'Assets VS Expenses',
+            data: assetExpenseChartData,
+            backgroundColor: assetExpenseChartBackgroundColor,
             hoverOffset: 4,
         }]
     };
-    config = {
+    assetExpenseConfig = {
         type: 'doughnut',
-        data: chartDataObj,
+        data: assetExpensechartDataObj,
     };
-    myChart = new Chart(
-        document.getElementById('myChart'),
-        config
+    assetExpenseChart = new Chart(
+        document.getElementById('assetExpenseChartData'),
+        assetExpenseConfig
     );
-<<<<<<< HEAD
-=======
 
     //For Expense Category Pie Chart
     expenseCategoryDataObj = {
@@ -361,20 +350,15 @@ function renderCharts() {
         document.getElementById('assetCategoryChartData'),
         assetCategoryConfig
     );
->>>>>>> yisrael
 }
 
 function updatePieChart(chart) {
-    myChart.data.datasets.pop();
-    myChart.data.datasets.push({
-      label: chartLabels,
-      backgroundColor: chartBackgroundColor,
+    assetExpenseChart.data.datasets.pop();
+    assetExpenseChart.data.datasets.push({
+      label: assetExpenseChartLabels,
+      backgroundColor: assetExpenseChartBackgroundColor,
       data: chart
     });
-<<<<<<< HEAD
-    myChart.update();
-  }
-=======
     //console.log(chart)
     assetExpenseChart.update();
     
@@ -405,7 +389,7 @@ function updatePieChart(chart) {
           data: assetCategoryChartData
         });
         assetCategoryChart.update();
-        console.log('expenseCategoryChart')
+        //console.log('expenseCategoryChart')
         // console.log(assetChartData, assetChartLabels)
         // console.log(expenseChartData, expenseChartLabels)
     })
@@ -433,4 +417,3 @@ function closeNav() {
     document.getElementById("sidebar").style.width = "0";
     document.querySelector("body").style.marginLeft= "0";
 }
->>>>>>> yisrael
