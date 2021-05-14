@@ -37,16 +37,16 @@ const assetSelect = `<select name="selectCategory" id="selectCategory">
     <option value="Miscellaneous">Miscellaneous</option>
 </select>`
 
-const ctx = document.getElementById('myChart');
-let myChart
-let config
-let chartDataObj
-let chartData = []
-const chartBackgroundColor = [
+//const ctx = document.getElementById('assetExpenseChart');
+let assetExpenseChart
+let assetExpenseConfig
+let assetExpensechartDataObj
+let assetExpenseChartData = []
+const assetExpenseChartBackgroundColor = [
     'rgb(255, 99, 132)',
     'rgb(54, 162, 235)'
 ]
-const chartLabels = ['Expenses', 'Assets']
+const assetExpenseChartLabels = ['Expenses', 'Assets']
 
 showFinances()
 addNewsbar ()
@@ -68,9 +68,9 @@ function updateTotals() {
     expenseTotalh3.innerText = `Total Expenses: ${expenseTotal}`
     assetTotalh3.innerText = `Total Assets: ${assetTotal}`
     grandTotalh2.innerText = `Net Assets: ${grandTotal}`
-    chartData = [expenseTotal, assetTotal]
-    chartDataObj.data = chartData
-    updatePieChart(chartData)
+    assetExpenseChartData = [expenseTotal, assetTotal]
+    //assetExpensechartDataObj.data = assetExpenseChartData
+    updatePieChart(assetExpenseChartData)
 } 
 
 function showFinances(){
@@ -224,8 +224,8 @@ function fetchPost(type, input, valueofInput, category){
         name: input,
         description: type,
         value: parseInt(valueofInput),
-        transactions : {category : category, date : `${new Date().getMonth()}/${new Date().getDate()}`
-        , value : valueofInput}
+        transactions : [{category : category, date : `${new Date().getMonth()}/${new Date().getDate()}`
+        , value : valueofInput}]
     }),
     })
     .then((res) => res.json())
@@ -263,33 +263,60 @@ function addNewsbar () {
 
 
 function renderChart() {
-    chartDataObj = {
-        labels: chartLabels,
+    assetExpensechartDataObj = {
+        labels: assetExpenseChartLabels,
         datasets: [{
-            label: chartLabels,
-            data: chartData,
-            backgroundColor: chartBackgroundColor,
+            label: 'Assets VS Expenses',
+            data: assetExpenseChartData,
+            backgroundColor: assetExpenseChartBackgroundColor,
             hoverOffset: 4,
         }]
     };
-    config = {
+    assetExpenseConfig = {
         type: 'doughnut',
-        data: chartDataObj,
+        data: assetExpensechartDataObj,
     };
-    myChart = new Chart(
-        document.getElementById('myChart'),
-        config
+    assetExpenseChart = new Chart(
+        document.getElementById('assetExpenseChartData'),
+        assetExpenseConfig
     );
+
+    // const expenseCategoryDataObj = {
+    //     labels: [
+    //       'Red',
+    //       'Blue',
+    //       'Yellow'
+    //     ],
+    //     datasets: [{
+    //       label: 'Expense Categories Breakdown',
+    //       data: [300, 50, 100],
+    //       backgroundColor: [
+    //         'rgb(255, 99, 132)',
+    //         'rgb(54, 162, 235)',
+    //         'rgb(255, 205, 86)'
+    //       ],
+    //       hoverOffset: 4
+    //     }]
+    //   };
+    //   assetExpenseConfig = {
+    //     type: 'doughnut',
+    //     data: assetExpensechartDataObj,
+    // };
+    // assetExpenseChart = new Chart(
+    //     document.getElementById('assetExpenseChartData'),
+    //     assetExpenseConfig
+    // );
 }
 
 function updatePieChart(chart) {
-    myChart.data.datasets.pop();
-    myChart.data.datasets.push({
-      label: chartLabels,
-      backgroundColor: chartBackgroundColor,
+    assetExpenseChart.data.datasets.pop();
+    assetExpenseChart.data.datasets.push({
+      label: assetExpenseChartLabels,
+      backgroundColor: assetExpenseChartBackgroundColor,
       data: chart
     });
-    myChart.update();
+    //console.log(chart)
+    assetExpenseChart.update();
   }
 
 

@@ -132,7 +132,7 @@ div#newTransaction {
         right: 0;
     }
 
-    div#pie-chart {
+    div#analytics-chart {
         width: 50%;
         display: block;
     margin-left: auto;
