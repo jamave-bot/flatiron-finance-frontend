@@ -132,14 +132,15 @@ div#newTransaction {
         right: 0;
     }
 
-    h2#analytics-title span{
+    h2.analytics-title, h2.navigate a{
+        /* padding: 15px; */
         font-size: 25pt;
         background-color: #918e8e;
         opacity: 90%;
-        /* z-index: 1; */
-        align-content: center;
+        display: inline-block;
+        text-align: center;
         width: 33%;
-        float:left;
+        /* float:left; */
     }
 
     div#analytics-chart {

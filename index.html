@@ -12,12 +12,17 @@
 <body>
 
     <h4>Flatiron Finance</h4>
+    <h2 class=navigate><a href="#expenseh2">Expenses</a><a href="#asseth2">Assets</a><a href="#analytics">Analytics</a></h2><br>
     <button class="openbtn" onclick="openNav()" id='openbtn'>☰ Open News</button> 
     <div id='name'>
 
     </div>
     
-    <h2>Expenses</h2>
+    <div id='total'>
+        <h2 id="grandTotal"></h2>
+    </div>
+
+    <h2 id='expenseh2'>Expenses</h2>
     <span id = 'expenses-span'></span>
     
     <br>
@@ -48,7 +53,7 @@
     <br><br>
 
 
-    <h2>Assets</h2>
+    <h2 id='asseth2'>Assets</h2>
     <span id = 'assets-span'></span>
     <br>
 
@@ -72,16 +77,8 @@
         <h3 id="assetTotal" class='total'></h3>
     </div>
 
-
-
-
-
-    <div id='total'>
-        <h2 id="grandTotal"></h2>
-    </div>
-
-    <h2>Analytics</h2>
-    <h2 id='analytics-title'><span>Assets VS Expenses</span><span>Asset Categories Breakdown</span><span>Expense Categories Breakdown</span></h2>
+    <h2 id='analytics'>Analytics</h2>
+    <h2 class='analytics-title'>Assets VS Expenses</h2><h2 class='analytics-title'>Expense Categories</h2><h2 class='analytics-title'>Asset Categories</h2></h2>
     <div id='analytics-chart'>
         <canvas id="assetExpenseChartData"></canvas>
         <canvas id="expenseCategoryChartData"></canvas>
