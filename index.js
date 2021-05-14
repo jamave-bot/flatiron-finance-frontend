@@ -18,16 +18,69 @@ let assetValueInput = document.querySelector('input#totalAssetValue')
 
 const newsSidebar = document.querySelector('div#sidebar')
 
+<<<<<<< HEAD
 const ctx = document.getElementById('myChart');
 let myChart
 let config
 let chartDataObj
 let chartData = []
 const chartBackgroundColor = [
+=======
+const expenseSelect = `
+<select name="selectCategory" id="selectCategory">
+    <option value="Mortgage">Mortgage</option>
+    <option value="Auto Loan">Auto Loan</option>
+    <option value="Tuition">Tuition</option>
+    <option value="Household Goods">Household Goods</option>
+    <option value="Travel">Travel</option>
+    <option value="Miscellaneous">Miscellaneous</option>
+</select>`
+
+const assetSelect = `
+<select name="selectCategory" id="selectCategory">
+    <option value="Wages">Wages</option>
+    <option value="Gift">Gift</option>
+    <option value="Investment">Investment</option>
+    <option value="Real Estate">Real Estate</option>
+    <option value="Benefits">Benefits</option>
+    <option value="Miscellaneous">Miscellaneous</option>
+</select>`
+
+let assetExpenseChart
+let assetCategoryArray
+let assetExpensechartDataObj
+let assetExpenseChartData = []
+const assetExpenseChartBackgroundColor = [
+>>>>>>> yisrael
     'rgb(255, 99, 132)',
     'rgb(54, 162, 235)'
 ]
 const chartLabels = ['Expenses', 'Assets']
+
+let expenseCategoryChart
+let expenseCategoryArray
+let expenseCategoryChartData = []
+let expenseCategoryChartLabels = [] //= ["Mortgage", "Auto Loan", "Tuition", "Household Goods",  "Travel","Miscellaneous"]
+const expenseCategoryChartBackgroundColor = [
+    'rgb(255, 99, 132)',
+    'rgb(255, 159, 64)',
+    'rgb(255, 205, 86',
+    'rgb(54, 162, 235)',
+    'rgb(75, 192, 192)',
+    'rgb(153, 102, 255)'
+  ]
+
+let assetCategoryChart  
+let assetCategoryChartData = []
+let assetCategoryChartLabels = []//= ["Wages", "Gift", "Investment", "Real Estate", "Benefits", "Miscellaneous"]
+const assetCategoryChartBackgroundColor = [
+    'rgb(255, 99, 132)',
+    'rgb(255, 159, 64)',
+    'rgb(255, 205, 86)',
+    'rgb(75, 192, 192)',
+    'rgb(54, 162, 235)',
+    'rgb(153, 102, 255)'
+  ]
 
 showFinances()
 addNewsbar ()
@@ -59,7 +112,13 @@ function showFinances(){
         .then(res => res.json())
         .then((financeArr)=>{           
             financeArr.forEach((financeObj) => {appendCard(financeObj)})
-            renderChart()
+            expenseCategoryArray = createChartArrays(financeArr.filter((elementObj) => elementObj.description.toLowerCase() === 'expense')) 
+            expenseCategoryChartLabels = Object.keys(expenseCategoryArray)
+            expenseCategoryChartData = Object.values(expenseCategoryArray)
+            assetCategoryArray = createChartArrays(financeArr.filter((elementObj) => elementObj.description.toLowerCase() === 'asset'))  
+            assetCategoryChartLabels = Object.keys(assetCategoryArray)
+            assetCategoryChartData = Object.values(assetCategoryArray)
+            renderCharts()
             updateTotals()
         })    
 }
@@ -177,6 +236,10 @@ assetsForm.addEventListener('submit', (evt) => {
     let newAsset = newAssetInput.value
     let sanitizedAssetValue = assetValueInput.value.replace(/[^0-9]+/g, '')
     let assetValue = parseInt(sanitizedAssetValue)
+<<<<<<< HEAD
+=======
+    let newCategory = evt.target.expenseCategoryArray.value
+>>>>>>> yisrael
     //console.log(assetValue)
     //console.log(typeof assetValue)
     if (sanitizedAssetValue === '' || newAsset === '') {
@@ -233,9 +296,16 @@ function addNewsbar () {
 }
 
 
+<<<<<<< HEAD
 function renderChart() {
     chartDataObj = {
         labels: chartLabels,
+=======
+function renderCharts() {
+    //For Asset VS Expense Pie Chart
+    assetExpensechartDataObj = {
+        labels: assetExpenseChartLabels,
+>>>>>>> yisrael
         datasets: [{
             label: chartLabels,
             data: chartData,
@@ -251,6 +321,47 @@ function renderChart() {
         document.getElementById('myChart'),
         config
     );
+<<<<<<< HEAD
+=======
+
+    //For Expense Category Pie Chart
+    expenseCategoryDataObj = {
+        labels: expenseCategoryChartLabels,
+        datasets: [{
+          label: 'Expense Categories Breakdown',
+          data: expenseCategoryChartData,
+          backgroundColor: expenseCategoryChartBackgroundColor,
+          hoverOffset: 4
+        }]
+      };
+      expenseCategoryConfig = {
+        type: 'doughnut',
+        data: expenseCategoryDataObj,
+    };
+    expenseCategoryChart = new Chart(
+        document.getElementById('expenseCategoryChartData'),
+        expenseCategoryConfig
+    );
+
+    //For Asset Category Pie Chart
+    assetCategoryDataObj = {
+        labels: assetCategoryChartLabels,
+        datasets: [{
+          label: 'Asset Categories Breakdown',
+          data: assetCategoryChartData,
+          backgroundColor: assetCategoryChartBackgroundColor,
+          hoverOffset: 4
+        }]
+      };
+      assetCategoryConfig = {
+        type: 'doughnut',
+        data: assetCategoryDataObj,
+    };
+    assetCategoryChart = new Chart(
+        document.getElementById('assetCategoryChartData'),
+        assetCategoryConfig
+    );
+>>>>>>> yisrael
 }
 
 function updatePieChart(chart) {
@@ -260,5 +371,66 @@ function updatePieChart(chart) {
       backgroundColor: chartBackgroundColor,
       data: chart
     });
+<<<<<<< HEAD
     myChart.update();
   }
+=======
+    //console.log(chart)
+    assetExpenseChart.update();
+    
+    fetch('http://localhost:3000/finances')
+    .then(res => res.json())
+    .then((financeArr)=>{    
+        
+        //Update Expense Category Chart
+        expenseCategoryArray = createChartArrays(financeArr.filter((elementObj) => elementObj.description.toLowerCase() === 'expense')) 
+        expenseCategoryChartLabels = Object.keys(expenseCategoryArray)
+        expenseCategoryChartData = Object.values(expenseCategoryArray)
+        expenseCategoryChart.data.datasets.pop();
+        expenseCategoryChart.data.datasets.push({
+          label: expenseCategoryChartLabels,
+          backgroundColor: expenseCategoryChartBackgroundColor,
+          data: expenseCategoryChartData
+        });
+        expenseCategoryChart.update();
+        
+        //Update Asset Category Chart  
+        assetCategoryArray = createChartArrays(financeArr.filter((elementObj) => elementObj.description.toLowerCase() === 'asset'))  
+        assetCategoryChartLabels = Object.keys(assetCategoryArray)
+        assetCategoryChartData = Object.values(assetCategoryArray)
+        assetCategoryChart.data.datasets.pop();
+        assetCategoryChart.data.datasets.push({
+          label: assetCategoryChartLabels,
+          backgroundColor: assetCategoryChartBackgroundColor,
+          data: assetCategoryChartData
+        });
+        assetCategoryChart.update();
+        console.log('expenseCategoryChart')
+        // console.log(assetChartData, assetChartLabels)
+        // console.log(expenseChartData, expenseChartLabels)
+    })
+  }
+
+function createChartArrays(objArray) {        
+    const newObject = {}
+    objArray.forEach((elementObj) => {
+        //console.log(elementObj.transactions)
+        elementObj.transactions.forEach (trxObj => {
+            newObject[trxObj.category] = newObject[trxObj.category] || 0
+            Object.assign(newObject, {[trxObj.category] : newObject[trxObj.category] += trxObj.value})
+        })
+    })
+    return newObject
+}
+
+
+function openNav() {
+    document.getElementById("sidebar").style.width = "250px";
+    document.querySelector("body").style.marginLeft = "250px";
+}
+
+function closeNav() {
+    document.getElementById("sidebar").style.width = "0";
+    document.querySelector("body").style.marginLeft= "0";
+}
+>>>>>>> yisrael

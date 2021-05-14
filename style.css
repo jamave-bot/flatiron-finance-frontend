@@ -132,11 +132,24 @@ div#newTransaction {
         right: 0;
     }
 
+    h2.analytics-title, h2.navigate a{
+        /* padding: 15px; */
+        font-size: 25pt;
+        background-color: #918e8e;
+        opacity: 90%;
+        display: inline-block;
+        text-align: center;
+        width: 33%;
+        /* float:left; */
+    }
+
     div#analytics-chart {
-        width: 50%;
-        display: block;
-    margin-left: auto;
-    margin-right: auto;
+        width: 33%;
+        display: inline-flex;
+        float: left;
+        /* flex-wrap: wrap; */
+        margin-left: auto;
+        margin-right: auto;
     }
 
 /* 
