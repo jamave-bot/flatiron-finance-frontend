@@ -114,13 +114,13 @@ div#newTransaction {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 30%;
-    height: 8em;
+    height: 12em;
     background-color:  #918e8e;
     text-align: center;
     display: none;
     }
 
-    div#newTransaction label,input {
+    div#newTransaction label,input, select {
         font-size: 15pt;
         margin-top: 10px;
     }

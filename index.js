@@ -18,6 +18,25 @@ let assetValueInput = document.querySelector('input#totalAssetValue')
 
 const newsSidebar = document.querySelector('div#sidebar')
 
+const expenseSelect = `
+    <select name="selectCategory" id="selectCategory">
+    <option value="Mortgage">Mortgage</option>
+    <option value="Auto Loan">Auto Loan</option>
+    <option value="Tuition">Tuition</option>
+    <option value="Household Goods">Household Goods</option>
+    <option value="Travel">Travel</option>
+    <option value="Miscellaneous">Miscellaneous</option>
+</select>`
+
+const assetSelect = `<select name="selectCategory" id="selectCategory">
+    <option value="Wages">Wages</option>
+    <option value="Gift">Gift</option>
+    <option value="Investment">Investment</option>
+    <option value="Real Estate">Real Estate</option>
+    <option value="Benefits">Benefits</option>
+    <option value="Miscellaneous">Miscellaneous</option>
+</select>`
+
 const ctx = document.getElementById('myChart');
 let myChart
 let config
@@ -108,7 +127,8 @@ function appendCard(financeObj) {
             <form id = 'new-transaction-form' data-id='${financeObj.id}'>
                 <strong>${financeObj.description.capitalize()} : ${financeObj.name}</strong><button>x</button><br>
                 <label for="newValue">New Transaction: </label><br>
-                <input type="text" id="newValue" name="newValue" placeholder="Transaction Amount">
+                <input type="text" id="newValue" name="newValue" placeholder="Transaction Amount"><br>
+                ${(financeObj.description.toLowerCase() === 'asset')?assetSelect:expenseSelect}<br>
                 <input type="submit" value="Submit">
             </form>`
         newTransaction.querySelector('button').addEventListener('click',(event) => {
@@ -138,19 +158,25 @@ function addTransaction (financeObj) {
     newTransactForm.addEventListener ('submit', (event) => {
         event.preventDefault()
         const newTransactionValue = financeObj.value + (parseInt(event.target.newValue.value) || 0)
+        const newCategory = event.target.selectCategory.value
+        const newTrxArr = [...financeObj.transactions]
+        newTrxArr.push({category : newCategory, date : `${new Date().getMonth()}/${new Date().getDate()}`
+        , value : (parseInt(event.target.newValue.value) || 0)})
         //console.log(newTransactionValue)
         //console.log(financeObj.value)
         //console.log(newTransactionValue)
         fetch(`http://localhost:3000/finances/${newTransactForm.dataset.id}`,
             {method: "PATCH",
             headers:{"Content-Type" : "application/json"},
-            body: JSON.stringify({value : parseInt(newTransactionValue)})
+            body: JSON.stringify({value : parseInt(newTransactionValue),
+            transactions : newTrxArr})
             }
         )
         .then(res => res.json())
-        .then((newValue) => {
-            document.querySelector(`div[data-id = "${financeObj.id}"] .itemValue`).innerText = newValue.value
-            financeObj.value = newValue.value
+        .then((newTrxobj) => {
+            document.querySelector(`div[data-id = "${financeObj.id}"] .itemValue`).innerText = newTrxobj.value
+            financeObj.value = newTrxobj.value
+            financeObj.transactions = newTrxobj.transactions
             newTransactForm.innerHTML = ''
             newTransaction.style.display = 'none'
             updateTotals()
