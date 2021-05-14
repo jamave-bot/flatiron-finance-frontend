@@ -18,35 +18,16 @@ let assetValueInput = document.querySelector('input#totalAssetValue')
 
 const newsSidebar = document.querySelector('div#sidebar')
 
-const expenseSelect = `
-    <select name="selectCategory" id="selectCategory">
-    <option value="Mortgage">Mortgage</option>
-    <option value="Auto Loan">Auto Loan</option>
-    <option value="Tuition">Tuition</option>
-    <option value="Household Goods">Household Goods</option>
-    <option value="Travel">Travel</option>
-    <option value="Miscellaneous">Miscellaneous</option>
-</select>`
-
-const assetSelect = `<select name="selectCategory" id="selectCategory">
-    <option value="Wages">Wages</option>
-    <option value="Gift">Gift</option>
-    <option value="Investment">Investment</option>
-    <option value="Real Estate">Real Estate</option>
-    <option value="Benefits">Benefits</option>
-    <option value="Miscellaneous">Miscellaneous</option>
-</select>`
-
-//const ctx = document.getElementById('assetExpenseChart');
-let assetExpenseChart
-let assetExpenseConfig
-let assetExpensechartDataObj
-let assetExpenseChartData = []
-const assetExpenseChartBackgroundColor = [
+const ctx = document.getElementById('myChart');
+let myChart
+let config
+let chartDataObj
+let chartData = []
+const chartBackgroundColor = [
     'rgb(255, 99, 132)',
     'rgb(54, 162, 235)'
 ]
-const assetExpenseChartLabels = ['Expenses', 'Assets']
+const chartLabels = ['Expenses', 'Assets']
 
 showFinances()
 addNewsbar ()
@@ -68,9 +49,9 @@ function updateTotals() {
     expenseTotalh3.innerText = `Total Expenses: ${expenseTotal}`
     assetTotalh3.innerText = `Total Assets: ${assetTotal}`
     grandTotalh2.innerText = `Net Assets: ${grandTotal}`
-    assetExpenseChartData = [expenseTotal, assetTotal]
-    //assetExpensechartDataObj.data = assetExpenseChartData
-    updatePieChart(assetExpenseChartData)
+    chartData = [expenseTotal, assetTotal]
+    chartDataObj.data = chartData
+    updatePieChart(chartData)
 } 
 
 function showFinances(){
@@ -127,11 +108,11 @@ function appendCard(financeObj) {
             <form id = 'new-transaction-form' data-id='${financeObj.id}'>
                 <strong>${financeObj.description.capitalize()} : ${financeObj.name}</strong><button>x</button><br>
                 <label for="newValue">New Transaction: </label><br>
-                <input type="text" id="newValue" name="newValue" placeholder="Transaction Amount"><br>
-                ${(financeObj.description.toLowerCase() === 'asset')?assetSelect:expenseSelect}<br>
+                <input type="text" id="newValue" name="newValue" placeholder="Transaction Amount">
                 <input type="submit" value="Submit">
             </form>`
         newTransaction.querySelector('button').addEventListener('click',(event) => {
+            newTransactForm.innerHTML = ''
             newTransaction.style.display = 'none'
         })
         addTransaction(financeObj)
@@ -157,25 +138,19 @@ function addTransaction (financeObj) {
     newTransactForm.addEventListener ('submit', (event) => {
         event.preventDefault()
         const newTransactionValue = financeObj.value + (parseInt(event.target.newValue.value) || 0)
-        const newCategory = event.target.selectCategory.value
-        const newTrxArr = [...financeObj.transactions]
-        newTrxArr.push({category : newCategory, date : `${new Date().getMonth()}/${new Date().getDate()}`
-        , value : (parseInt(event.target.newValue.value) || 0)})
         //console.log(newTransactionValue)
         //console.log(financeObj.value)
         //console.log(newTransactionValue)
         fetch(`http://localhost:3000/finances/${newTransactForm.dataset.id}`,
             {method: "PATCH",
             headers:{"Content-Type" : "application/json"},
-            body: JSON.stringify({value : parseInt(newTransactionValue),
-            transactions : newTrxArr})
+            body: JSON.stringify({value : parseInt(newTransactionValue)})
             }
         )
         .then(res => res.json())
-        .then((newTrxobj) => {
-            document.querySelector(`div[data-id = "${financeObj.id}"] .itemValue`).innerText = newTrxobj.value
-            financeObj.value = newTrxobj.value
-            financeObj.transactions = newTrxobj.transactions
+        .then((newValue) => {
+            document.querySelector(`div[data-id = "${financeObj.id}"] .itemValue`).innerText = newValue.value
+            financeObj.value = newValue.value
             newTransactForm.innerHTML = ''
             newTransaction.style.display = 'none'
             updateTotals()
@@ -188,12 +163,11 @@ expensesForm.addEventListener('submit', (evt) => {
     let newExpense = newExpenseInput.value
     let sanitizedExpenseValue = expenseValueInput.value.replace(/[^0-9]+/g, '')
     let expenseValue = parseInt(sanitizedExpenseValue)
-    let newCategory = evt.target.expenseCategory.value
     if (sanitizedExpenseValue == '' || newExpense === '') {
         alert('Your Name or Value input are not valid. Please enter a valid name and value.')
         return
     }
-    fetchPost('Expense', newExpense, expenseValue, newCategory)
+    fetchPost('Expense', newExpense, expenseValue)
     evt.target.reset()
 })
 
@@ -203,19 +177,18 @@ assetsForm.addEventListener('submit', (evt) => {
     let newAsset = newAssetInput.value
     let sanitizedAssetValue = assetValueInput.value.replace(/[^0-9]+/g, '')
     let assetValue = parseInt(sanitizedAssetValue)
-    let newCategory = evt.target.assetCategory.value
     //console.log(assetValue)
     //console.log(typeof assetValue)
     if (sanitizedAssetValue === '' || newAsset === '') {
         alert('Your Name or Value inputs are not valid. Please enter a valid name and value.')
         return
     }
-    fetchPost('Asset', newAsset, assetValue, newCategory)
+    fetchPost('Asset', newAsset, assetValue)
     evt.target.reset()
 })
     
-function fetchPost(type, input, valueofInput, category){
-    fetch(`http://localhost:3000/finances`, {
+function fetchPost(type, input, valueofInput){
+ fetch(`http://localhost:3000/finances`, {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
@@ -223,9 +196,7 @@ function fetchPost(type, input, valueofInput, category){
     body: JSON.stringify({
         name: input,
         description: type,
-        value: parseInt(valueofInput),
-        transactions : [{category : category, date : `${new Date().getMonth()}/${new Date().getDate()}`
-        , value : valueofInput}]
+        value: parseInt(valueofInput)
     }),
     })
     .then((res) => res.json())
@@ -263,69 +234,31 @@ function addNewsbar () {
 
 
 function renderChart() {
-    assetExpensechartDataObj = {
-        labels: assetExpenseChartLabels,
+    chartDataObj = {
+        labels: chartLabels,
         datasets: [{
-            label: 'Assets VS Expenses',
-            data: assetExpenseChartData,
-            backgroundColor: assetExpenseChartBackgroundColor,
+            label: chartLabels,
+            data: chartData,
+            backgroundColor: chartBackgroundColor,
             hoverOffset: 4,
         }]
     };
-    assetExpenseConfig = {
+    config = {
         type: 'doughnut',
-        data: assetExpensechartDataObj,
+        data: chartDataObj,
     };
-    assetExpenseChart = new Chart(
-        document.getElementById('assetExpenseChartData'),
-        assetExpenseConfig
+    myChart = new Chart(
+        document.getElementById('myChart'),
+        config
     );
-
-    // const expenseCategoryDataObj = {
-    //     labels: [
-    //       'Red',
-    //       'Blue',
-    //       'Yellow'
-    //     ],
-    //     datasets: [{
-    //       label: 'Expense Categories Breakdown',
-    //       data: [300, 50, 100],
-    //       backgroundColor: [
-    //         'rgb(255, 99, 132)',
-    //         'rgb(54, 162, 235)',
-    //         'rgb(255, 205, 86)'
-    //       ],
-    //       hoverOffset: 4
-    //     }]
-    //   };
-    //   assetExpenseConfig = {
-    //     type: 'doughnut',
-    //     data: assetExpensechartDataObj,
-    // };
-    // assetExpenseChart = new Chart(
-    //     document.getElementById('assetExpenseChartData'),
-    //     assetExpenseConfig
-    // );
 }
 
 function updatePieChart(chart) {
-    assetExpenseChart.data.datasets.pop();
-    assetExpenseChart.data.datasets.push({
-      label: assetExpenseChartLabels,
-      backgroundColor: assetExpenseChartBackgroundColor,
+    myChart.data.datasets.pop();
+    myChart.data.datasets.push({
+      label: chartLabels,
+      backgroundColor: chartBackgroundColor,
       data: chart
     });
-    //console.log(chart)
-    assetExpenseChart.update();
+    myChart.update();
   }
-
-
-function openNav() {
-    document.getElementById("sidebar").style.width = "250px";
-    document.querySelector("body").style.marginLeft = "250px";
-}
-
-function closeNav() {
-    document.getElementById("sidebar").style.width = "0";
-    document.querySelector("body").style.marginLeft= "0";
-}
