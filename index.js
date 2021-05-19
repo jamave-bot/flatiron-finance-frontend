@@ -234,7 +234,7 @@ assetsForm.addEventListener('submit', (evt) => {
     let newAsset = newAssetInput.value
     let sanitizedAssetValue = assetValueInput.value.replace(/[^0-9]+/g, '')
     let assetValue = parseInt(sanitizedAssetValue)
-    let newCategory = evt.target.expenseCategoryArray.value
+    let newCategory = evt.target.assetCategory.value
     //console.log(assetValue)
     //console.log(typeof assetValue)
     if (sanitizedAssetValue === '' || newAsset === '') {
